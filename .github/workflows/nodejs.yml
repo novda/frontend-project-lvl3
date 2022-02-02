@@ -1,6 +1,5 @@
 name: Node CI
 
-
 on:
   - push
 
@@ -14,3 +13,27 @@ jobs:
       matrix:
         node-version: [14.x]
       
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-verison }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-verison }}
+      
+      - name: npm install
+        run: |
+          make install
+        env:
+          CI: true
+        
+      - name: Run linter
+        run: |
+          make lint
+      
+      - name: Test & Publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: make test-coverage
+          debug: true
