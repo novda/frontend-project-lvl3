@@ -1,0 +1,26 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "hexlet frontend project 3-lvl",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npx jest --bail"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/novda/frontend-project-lvl3.git"
+  },
+  "author": "zaha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/novda/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/novda/frontend-project-lvl3#readme",
+  "devDependencies": {
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  },
+  "dependencies": {}
+}
