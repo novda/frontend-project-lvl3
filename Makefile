@@ -1,4 +1,4 @@
-install: install-deps
+install:
 		npm ci
 
 publish:
