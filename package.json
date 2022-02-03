@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "webpack": "webpack",
-    "build": "webpack --mode=development",
-    "prod": "webpack --mode=production",
+    "dev": "charge serve src",
+    "build": "charge build src public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
