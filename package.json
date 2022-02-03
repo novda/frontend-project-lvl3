@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/novda/frontend-project-lvl3#readme",
   "devDependencies": {
+    "@static/charge": "^1.7.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.6.0",
     "eslint": "^8.8.0",
