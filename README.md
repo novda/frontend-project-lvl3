@@ -5,4 +5,4 @@
 
 
 #### Vercel link:
-https://frontend-project-lvl3-c76fk5yre-novda.vercel.app/
+https://frontend-project-lvl3-git-main-novda.vercel.app/
