@@ -4,17 +4,28 @@ import i18n from 'i18next';
 import axios from 'axios';
 import parsing from './parser.js';
 
-const getRssData = (watchedObject) => {
-  watchedObject.rssLinks.forEach((link) => {
-    axios({
-      method: 'get',
-      url: link,
-    })
-      .then(console.log)
-      .catch(() => {
+const checkRss = (link, watchedObject) => {
+  axios({
+    method: 'get',
+    url: `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(link)}`,
+  })
+    .then((response) => parsing(response.data.contents))
+    .then((data) => {
+      if (data !== -1) {
+        watchedObject.status = 'valid';
+        watchedObject.rssLinks.push(link);
+        watchedObject.content.push(data);
+      } else {
         watchedObject.status = 'invalidRss';
-      });
-  });
+      }
+    })
+    .catch(() => {
+      watchedObject.status = 'networkError';
+    });
+};
+
+const renderRss = (watchedObject, data) => {
+
 };
 
 export default (element) => {
@@ -30,7 +41,7 @@ export default (element) => {
             valid: 'RSS успешно загружен',
             isNotNull: 'Не должно быть пустым',
             invalidRss: 'Ресурс не содержит валидный RSS',
-            networkFail: 'Ошибка сети',
+            networkError: 'Ошибка сети',
           },
         },
       },
@@ -50,6 +61,7 @@ export default (element) => {
   const state = {
     status: '',
     rssLinks: [],
+    content: [],
   };
 
   const watchedObject = onChange(state, (path, value) => {
@@ -57,7 +69,7 @@ export default (element) => {
       const feedbackEl = document.querySelector('.feedback');
       const inputArea = document.querySelector('#url-input');
       switch (value) {
-        case 'already_exist':
+        case 'alreadyExist':
           feedbackEl.classList.add('text-danger');
           feedbackEl.textContent = i18nInstance.t('feedback.existLink');
           inputArea.classList.add('is-invalid');
@@ -81,11 +93,17 @@ export default (element) => {
           feedbackEl.textContent = i18nInstance.t('feedback.valid');
           document.querySelector('form').reset();
           inputArea.focus();
-          getRssData(watchedObject);
+          console.log(state.content);
+          break;
+
+        case 'networkError':
+          feedbackEl.classList.add('text-danger');
+          feedbackEl.textContent = i18nInstance.t('feedback.networkError');
+          inputArea.classList.add('is-invalid');
           break;
 
         default:
-          console.log('de');
+          console.log('!!case default!!');
       }
     }
   });
@@ -96,12 +114,10 @@ export default (element) => {
     const link = formData.get('link');
     userSchema.validate({ link })
       .then((linkVal) => {
-        console.log(link);
         if (!watchedObject.rssLinks.includes(linkVal.link)) {
-          watchedObject.rssLinks.push(linkVal.link);
-          watchedObject.status = 'valid';
+          checkRss(link, watchedObject);
         } else {
-          watchedObject.status = 'already_exist';
+          watchedObject.status = 'alreadyExist';
         }
       })
       .catch((er) => {
