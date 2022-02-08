@@ -1,3 +1,5 @@
+import { uniqueId } from 'lodash';
+
 export default (data) => {
   const parsedData = new window.DOMParser().parseFromString(data, 'text/xml');
   const channel = parsedData.querySelector('channel');
@@ -5,6 +7,7 @@ export default (data) => {
     return -1;
   }
   const channelData = {
+    id: uniqueId(),
     title: channel.querySelector('title').textContent,
     description: channel.querySelector('description').textContent,
     link: channel.querySelector('link').textContent,
@@ -14,6 +17,7 @@ export default (data) => {
   const result = [];
   items.forEach((item) => {
     result.push({
+      id: uniqueId(),
       title: item.querySelector('title').textContent,
       link: item.querySelector('link').textContent,
       description: item.querySelector('description').textContent,

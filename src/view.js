@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
 import onChange from 'on-change';
 import { object, string, setLocale } from 'yup';
 import i18n from 'i18next';
 import axios from 'axios';
 import parsing from './parser.js';
+import renderRSS from './renderRSS.js';
 
 const checkRss = (link, watchedObject) => {
   axios({
@@ -12,20 +14,17 @@ const checkRss = (link, watchedObject) => {
     .then((response) => parsing(response.data.contents))
     .then((data) => {
       if (data !== -1) {
-        watchedObject.status = 'valid';
         watchedObject.rssLinks.push(link);
         watchedObject.content.push(data);
+        watchedObject.status = 'valid';
       } else {
         watchedObject.status = 'invalidRss';
       }
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log('error catch checkRss', e);
       watchedObject.status = 'networkError';
     });
-};
-
-const renderRss = (watchedObject, data) => {
-
 };
 
 export default (element) => {
@@ -91,9 +90,10 @@ export default (element) => {
           feedbackEl.classList.remove('text-danger');
           inputArea.classList.remove('is-invalid');
           feedbackEl.textContent = i18nInstance.t('feedback.valid');
+          renderRSS(state.content);
           document.querySelector('form').reset();
           inputArea.focus();
-          console.log(state.content);
+
           break;
 
         case 'networkError':
