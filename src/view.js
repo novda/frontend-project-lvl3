@@ -22,10 +22,37 @@ const checkRss = (link, watchedObject) => {
       }
     })
     .catch((e) => {
-      console.log('error catch checkRss', e);
+      console.log(e);
       watchedObject.status = 'networkError';
     });
 };
+
+function checkAndAddRss(link, state) {
+  axios({
+    method: 'get',
+    url: `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(link)}`,
+  })
+    .then((response) => parsing(response.data.contents))
+    .then((data) => {
+      if (data !== -1) {
+        state.content.push(data);
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      state.status = 'networkError';
+    });
+}
+
+function update(state) {
+  state.content = [];
+  const links = state.rssLinks;
+  links.forEach((link) => {
+    checkAndAddRss(link, state);
+  });
+  renderRSS(state.content);
+  setTimeout(update, 5000, state);
+}
 
 export default (element) => {
   const i18nInstance = i18n.createInstance();
@@ -93,7 +120,9 @@ export default (element) => {
           renderRSS(state.content);
           document.querySelector('form').reset();
           inputArea.focus();
-
+          watchedObject.status = '';
+          console.log('state before update', state);
+          update(state);
           break;
 
         case 'networkError':
@@ -120,8 +149,7 @@ export default (element) => {
           watchedObject.status = 'alreadyExist';
         }
       })
-      .catch((er) => {
-        console.log(er);
+      .catch(() => {
         watchedObject.status = 'invalid';
       });
   });
