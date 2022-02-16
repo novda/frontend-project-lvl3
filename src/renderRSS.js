@@ -142,10 +142,10 @@ const renderRSS = (data) => {
 
 export default (data) => {
   if (document.contains(document.querySelector('ul'))) {
-    console.log('ulukuk');
+    console.log('ulukuk', JSON.stringify(data), data);
     renderRSS(data);
   } else {
-    console.log('11111');
+    console.log('11111', JSON.stringify(data), data);
     firstTimeRenderRSS(data);
   }
 };

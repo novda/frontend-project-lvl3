@@ -27,32 +27,28 @@ const checkRss = (link, watchedObject) => {
     });
 };
 
-function checkAndAddRss(link, state) {
-  axios({
-    method: 'get',
-    url: `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(link)}`,
-  })
-    .then((response) => parsing(response.data.contents))
-    .then((data) => {
-      if (data !== -1) {
-        state.content.push(data);
-      }
-    })
-    .catch((e) => {
-      console.log(e);
-      state.status = 'networkError';
-    });
-}
-
-function update(state) {
+const update = (state) => {
   state.content = [];
   const links = state.rssLinks;
   links.forEach((link) => {
-    checkAndAddRss(link, state);
+    axios({
+      method: 'get',
+      url: `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(link)}`,
+    })
+      .then((response) => parsing(response.data.contents))
+      .then((data) => {
+        if (data !== -1) {
+          state.content.push(data);
+          renderRSS(state.content);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        state.status = 'networkError';
+      });
   });
-  renderRSS(state.content);
   setTimeout(update, 5000, state);
-}
+};
 
 export default (element) => {
   const i18nInstance = i18n.createInstance();
@@ -121,8 +117,7 @@ export default (element) => {
           document.querySelector('form').reset();
           inputArea.focus();
           watchedObject.status = '';
-          console.log('state before update', state);
-          update(state);
+          setTimeout(update, 5000, state);
           break;
 
         case 'networkError':
