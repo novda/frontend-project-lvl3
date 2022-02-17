@@ -136,7 +136,7 @@ export default (element) => {
   element.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const link = formData.get('link');
+    const link = formData.get('url');
     userSchema.validate({ link })
       .then((linkVal) => {
         if (!watchedObject.rssLinks.includes(linkVal.link)) {
