@@ -17,10 +17,11 @@ export default (data) => {
   const result = [];
   items.forEach((item) => {
     result.push({
-      id: uniqueId(),
+      id: item.querySelector('guid').textContent,
       title: item.querySelector('title').textContent,
       link: item.querySelector('link').textContent,
       description: item.querySelector('description').textContent,
+      opened: false,
     });
   });
   return { channel: channelData, data: result };

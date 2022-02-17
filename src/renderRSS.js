@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const firstTimeRenderRSS = (data) => {
   // create posts card
   const postsCard = document.createElement('div');
@@ -95,7 +96,11 @@ const renderRSS = (data) => {
       li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
       const a = document.createElement('a');
       a.setAttribute('href', post.link);
-      a.setAttribute('class', 'fw-bold');
+      if (post.opened) {
+        a.setAttribute('class', 'fw-normal');
+      } else {
+        a.setAttribute('class', 'fw-bold');
+      }
       a.setAttribute('data-id', post.id);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
@@ -140,12 +145,50 @@ const renderRSS = (data) => {
   ul2.append(...(feedToHtml.flat()));
 };
 
-export default (data) => {
+const modealConf = (state) => {
+  const modal = document.getElementById('modal');
+  modal.addEventListener('show.bs.modal', (event) => {
+    const evButton = event.relatedTarget;
+    const postId = evButton.getAttribute('data-id');
+    state.openedId.push(postId);
+    let targetData;
+    state.content.forEach((rssItem) => {
+      rssItem.data.forEach((post) => {
+        if (post.id === postId) {
+          targetData = post;
+        }
+      });
+    });
+
+    const modalTitle = modal.querySelector('.modal-title');
+    const modalBody = modal.querySelector('.modal-body');
+    const linkButton = modal.querySelector('.btn-primary');
+
+    modalTitle.textContent = targetData.title;
+    modalBody.textContent = targetData.description;
+    linkButton.setAttribute('href', targetData.link);
+
+    evButton.previousSibling.classList.remove('fw-bold');
+    evButton.previousSibling.classList.add('fw-normal');
+  });
+};
+
+const changeAfterView = (state) => {
+  state.content.forEach((rssItem) => {
+    rssItem.data.forEach((post) => {
+      if (state.openedId.includes(post.id)) {
+        post.opened = true;
+      }
+    });
+  });
+};
+
+export default (state) => {
+  changeAfterView(state);
   if (document.contains(document.querySelector('ul'))) {
-    console.log('ulukuk', JSON.stringify(data), data);
-    renderRSS(data);
+    renderRSS(state.content);
   } else {
-    console.log('11111', JSON.stringify(data), data);
-    firstTimeRenderRSS(data);
+    firstTimeRenderRSS(state.content);
   }
+  modealConf(state);
 };

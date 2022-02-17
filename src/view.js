@@ -39,7 +39,7 @@ const update = (state) => {
       .then((data) => {
         if (data !== -1) {
           state.content.push(data);
-          renderRSS(state.content);
+          renderRSS(state);
         }
       })
       .catch((e) => {
@@ -84,6 +84,7 @@ export default (element) => {
     status: '',
     rssLinks: [],
     content: [],
+    openedId: [],
   };
 
   const watchedObject = onChange(state, (path, value) => {
@@ -113,7 +114,7 @@ export default (element) => {
           feedbackEl.classList.remove('text-danger');
           inputArea.classList.remove('is-invalid');
           feedbackEl.textContent = i18nInstance.t('feedback.valid');
-          renderRSS(state.content);
+          renderRSS(state);
           document.querySelector('form').reset();
           inputArea.focus();
           watchedObject.status = '';
