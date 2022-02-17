@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/novda/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/novda/frontend-project-lvl3/actions)\r [![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://github.com/novda/frontend-project-lvl3/maintainability)\r ![NodeCI](https://github.com/novda/frontend-project-lvl3/actions/workflows/nodejs.yml/badge.svg)",
-  "main": "./src/index.js",
+  "main": "index.js",
   "scripts": {
     "webpack": "webpack",
     "dev": "charge serve src",
