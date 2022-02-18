@@ -129,6 +129,8 @@ export default (element) => {
 
         default:
           console.log('!!case default!!');
+          document.querySelector('.btn').removeAttribute('disabled');
+          document.querySelector('input').removeAttribute('readonly');
       }
     }
   });
@@ -137,6 +139,8 @@ export default (element) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const link = formData.get('url');
+    document.querySelector('.btn').setAttribute('disabled', '');
+    document.querySelector('input').setAttribute('readonly', 'true');
     userSchema.validate({ link })
       .then((linkVal) => {
         if (!watchedObject.rssLinks.includes(linkVal.link)) {
