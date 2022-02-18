@@ -96,18 +96,21 @@ export default (element) => {
           feedbackEl.classList.add('text-danger');
           feedbackEl.textContent = i18nInstance.t('feedback.existLink');
           inputArea.classList.add('is-invalid');
+          watchedObject.status = '';
           break;
 
         case 'invalid':
           feedbackEl.classList.add('text-danger');
           feedbackEl.textContent = i18nInstance.t('feedback.invalidLink');
           inputArea.classList.add('is-invalid');
+          watchedObject.status = '';
           break;
 
         case 'invalidRss':
           feedbackEl.classList.add('text-danger');
           feedbackEl.textContent = i18nInstance.t('feedback.invalidRss');
           inputArea.classList.add('is-invalid');
+          watchedObject.status = '';
           break;
 
         case 'valid':
@@ -125,6 +128,7 @@ export default (element) => {
           feedbackEl.classList.add('text-danger');
           feedbackEl.textContent = i18nInstance.t('feedback.networkError');
           inputArea.classList.add('is-invalid');
+          watchedObject.status = '';
           break;
 
         default:
